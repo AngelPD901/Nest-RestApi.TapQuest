@@ -10,7 +10,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {
     super({
-      secretOrKey: process.env.JWT_Key,
+      secretOrKey: process.env.JWT_KEY,
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     });
   }
