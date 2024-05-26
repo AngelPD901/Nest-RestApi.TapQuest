@@ -60,7 +60,7 @@ export class UserService {
     const user = await this.userModel
       .findOne({ username: username })
       .select(['username', 'password', '_id']);
-    console.log(user);
+    
     if (!user)
       throw new UnauthorizedException('Credenciales no validas (username)');
 
