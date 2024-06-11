@@ -24,10 +24,14 @@ export class UserService {
     @InjectModel(User.name) private userModel: Model<User>,
     private readonly jwtService: JwtService,
   ) {}
-  
+
   //Obtener todos los usuarios
-  findAll() {
-    return this.userModel.find().select('-password').sort({'score':1});
+  async findAll() {
+    const users = await this.userModel
+      .find()
+      .select('-password')
+      .sort({ score: 1 });
+    return { userlist: users };
   }
 
   //Crear un usuario en el sistema
@@ -60,7 +64,7 @@ export class UserService {
     const user = await this.userModel
       .findOne({ username: username })
       .select(['username', 'password', '_id']);
-    
+
     if (!user)
       throw new UnauthorizedException('Credenciales no validas (username)');
 
@@ -74,10 +78,9 @@ export class UserService {
   }
 
   //Actualizar un User
-  async updateUser(updateUser: updateUserDto,id:Types.ObjectId) {
-  
-    const user = await this.userModel.findByIdAndUpdate(id,updateUser)
-    
+  async updateUser(updateUser: updateUserDto, id: Types.ObjectId) {
+    const user = await this.userModel.findByIdAndUpdate(id, updateUser);
+
     const newUser = await this.userModel.findById(id).select('-password');
 
     return newUser;
